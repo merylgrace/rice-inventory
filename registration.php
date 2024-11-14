@@ -15,10 +15,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($conn->query($query) === TRUE) {
         echo "Registration successful.";
         header("Location: login.php");
-    } else {
-        echo "Error: " . $query . "<br>" . $conn->error;
+        exit();
     }
-}
 ?>
 
 <!DOCTYPE html>
