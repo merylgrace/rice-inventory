@@ -2,18 +2,27 @@
 include 'dbconnect.php';
 session_start();
 
+// Check if user is already logged in
+if (isset($_SESSION['UserID'])) {
+    header("Location: dashboard.php");
+    exit();
+}
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $UserName = $_POST["UserName"];
     $Password = $_POST["Password"];
 
-    // ifetch ang hashed password ni user
-    $query = "SELECT UserID, Password, RoleID FROM users WHERE UserName = '$UserName'";
-    $result = $conn->query($query);
+    // Prepare the query to prevent SQL injection
+    $query = "SELECT UserID, Password, RoleID FROM users WHERE UserName = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("s", $UserName);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
     if ($result->num_rows == 1) {
         $row = $result->fetch_assoc();
-        
-        // Iverify ang password sa hash
+
+        // Verify the password with hash
         if (password_verify($Password, $row["Password"])) {
             $_SESSION["UserID"] = $row["UserID"];
             $_SESSION["RoleID"] = $row["RoleID"];
@@ -47,9 +56,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <button type="submit">Login</button>
         </form>
         
-        <!-- kung wala pa nakaregister -->
-        <p>Not yet registered? <a href="http://localhost/rice-inventory-sys/register.php">Sign up here</a>
-
+        <p>Not yet registered? <a href="register.php">Sign up here</a></p>
     </div>
 </body>
 </html>
