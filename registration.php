@@ -5,26 +5,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $UserName = $_POST["UserName"];
     $Password = $_POST["Password"];
     $RoleID = $_POST["RoleID"];
+}
 
-    // hash ang password ayha save sa database
-    $hashedPassword = password_hash($Password, PASSWORD_DEFAULT);
+// hash ang password ayha save sa database
+$hashedPassword = password_hash($Password, PASSWORD_DEFAULT);
 
-    $query = "INSERT INTO users (UserName, Password, RoleID, created_at, updated_at) 
+$query = "INSERT INTO users (UserName, Password, RoleID, created_at, updated_at) 
               VALUES ('$UserName', '$hashedPassword', '$RoleID', NOW(), NOW())";
-    
-    if ($conn->query($query) === TRUE) {
-        echo "Registration successful.";
-        header("Location: login.php");
-        exit();
-    }
+
+if ($conn->query($query) === TRUE) {
+    echo "Registration successful.";
+    header("Location: login.php");
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <link rel="stylesheet" href="css/style.css">
     <title>Register</title>
 </head>
+
 <body>
     <div class="register-container">
         <h2>Register</h2>
@@ -44,9 +47,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             <button type="submit">Sign Up</button>
         </form>
-        
+
         <!-- basin naa nay account -->
         <p>Already have an account? <a href="login.php">Log in here</a></p>
     </div>
 </body>
+
 </html>
