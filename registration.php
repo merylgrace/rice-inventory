@@ -28,28 +28,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Register</title>
 </head>
 <body>
-    <div class="container">
+    <div class="register-container">
         <h2>Register</h2>
-        <form method="POST" action="register.php">
-            <label>Username:</label>
-            <input type="text" name="username" required>
+        <form action="register.php" method="POST">
+            <label for="UserName">Username</label>
+            <input type="text" name="UserName" required>
 
-            <label>Password:</label>
-            <input type="password" name="password" required>
+            <label for="Password">Password</label>
+            <input type="password" name="Password" required>
 
-            <label>Role:</label>
-            <select name="roleID">
-                <?php
-                $roles_query = "SELECT RoleID, RoleName FROM roles";
-                $roles_result = $conn->query($roles_query);
-                while ($role = $roles_result->fetch_assoc()) {
-                    echo "<option value='{$role['RoleID']}'>{$role['RoleName']}</option>";
-                }
-                ?>
+            <!-- Role selection dropdown -->
+            <label for="RoleID">Role</label>
+            <select name="RoleID" required>
+                <option value="1">Admin</option>
+                <option value="2">User</option>
             </select>
 
-            <button type="submit">Register</button>
+            <button type="submit">Sign Up</button>
         </form>
+        
+        <!-- basin naa nay account -->
+        <p>Already have an account? <a href="login.php">Log in here</a></p>
     </div>
 </body>
 </html>
