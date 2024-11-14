@@ -48,7 +48,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </form>
         
         <!-- kung wala pa nakaregister -->
-        <p>Not yet registered? <a href="register.php">Sign up here</a></p>
+        <p>Not yet registered? <a href="http://localhost/rice_inventory_sys/register.php">Sign up here</a>
+
     </div>
 </body>
 </html>
