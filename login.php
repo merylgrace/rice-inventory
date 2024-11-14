@@ -35,17 +35,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Login</title>
 </head>
 <body>
-    <div class="container">
+    <div class="login-container">
         <h2>Login</h2>
-        <form method="POST" action="login.php">
-            <label>Username:</label>
-            <input type="text" name="username" required>
-
-            <label>Password:</label>
-            <input type="password" name="password" required>
-
+        <form action="login.php" method="POST">
+            <label for="UserName">Username</label>
+            <input type="text" name="UserName" required>
+            
+            <label for="Password">Password</label>
+            <input type="password" name="Password" required>
+            
             <button type="submit">Login</button>
         </form>
+        
+        <!-- kung wala pa nakaregister -->
+        <p>Not yet registered? <a href="register.php">Sign up here</a></p>
     </div>
 </body>
 </html>
