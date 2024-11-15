@@ -1,7 +1,8 @@
 <?php
-include 'dbconnect.php';
+include 'dbconnect.php'; 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Retrieve data from the form
     $UserName = $_POST["UserName"];
     $Password = $_POST["Password"];
     $RoleID = $_POST["RoleID"];
@@ -9,34 +10,41 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Hash the password before saving it to the database
     $hashedPassword = password_hash($Password, PASSWORD_DEFAULT);
 
-    $query = "INSERT INTO users (UserName, Password, RoleID, created_at, updated_at)
-VALUES ('$UserName', '$hashedPassword', '$RoleID', NOW(), NOW())";
+    // Prepare the SQL query to prevent SQL injection
+    $query = "INSERT INTO users (UserName, Password, RoleID, created_at, updated_at) 
+              VALUES (?, ?, ?, NOW(), NOW())";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("ssi", $UserName, $hashedPassword, $RoleID);
 
-    if ($stmt->execute()) {
-        echo "Registration successful.";
-        header("Location: login.php"); // Redirection after successful registration
-        exit();
-    } else {
-        echo "Error: " . $stmt->error;
+    try {
+        if ($stmt->execute()) {
+            // Redirect to login page after successful registration
+            header("Location: login.php");
+            exit();
+        } else {
+            // Handle potential database errors
+            throw new Exception("Unable to register user. Please check your RoleID and database setup.");
+        }
+    } catch (Exception $e) {
+        // Display the error message for debugging
+        echo "Error: " . $e->getMessage();
     }
+
+    // Close the prepared statement
     $stmt->close();
 }
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <link rel="stylesheet" href="css/style.css">
     <title>Register</title>
 </head>
-
 <body>
     <div class="register-container">
         <h2>Register</h2>
-        <form action="register.php" method="POST"> <!-- Fix form action -->
+        <form action="registration.php" method="POST">
             <label for="UserName">Username</label>
             <input type="text" name="UserName" required>
 
@@ -56,5 +64,4 @@ VALUES ('$UserName', '$hashedPassword', '$RoleID', NOW(), NOW())";
         <p>Already have an account? <a href="login.php">Log in here</a></p>
     </div>
 </body>
-
 </html>
