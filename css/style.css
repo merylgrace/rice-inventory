@@ -5,16 +5,21 @@ body {
     color: #333;
     margin: 0;
     padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Full viewport height */
 }
 
 /* Container for Forms */
 .container, .register-container, .login-container {
-    max-width: 400px;
-    margin: 50px auto;
+    width: 80%; /* Adjust width for a responsive layout */
+    max-width: 1200px; /* Set a max width for larger screens */
     padding: 20px;
     background-color: #ffffff;
     border-radius: 8px;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    margin: 0 auto; /* Center horizontally */
 }
 
 /* Form Headings */
@@ -99,6 +104,13 @@ p {
 
 .dashboard-table td {
     background-color: #f9f9f9;
+}
+
+/* Center Dashboard Content */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 /* Responsive Design */
