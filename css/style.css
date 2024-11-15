@@ -116,6 +116,45 @@ p {
     align-items: center;
 }
 
+/* Tab Styles */
+.tab-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.tab-button {
+    background-color: #fff;
+    color: #4c51bf;
+    padding: 10px 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px 5px 0 0; /* Rounded top corners */
+    margin: 0 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 1em;
+}
+
+.tab-button:hover {
+    background-color: #f4f4f9;
+}
+
+.tab-button.active {
+    background-color: #5a67d8;
+    color: #fff;
+    border-color: #5a67d8;
+}
+
+/* Tab Content */
+.tab-content {
+    width: 100%;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    background-color: #fff;
+}
+
 /* Responsive Design */
 @media (max-width: 600px) {
     .container, .register-container, .login-container {
@@ -129,5 +168,10 @@ p {
 
     button {
         padding: 10px;
+    }
+
+    .tab-button {
+        padding: 8px 15px;
+        font-size: 0.9em;
     }
 }
