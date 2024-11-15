@@ -48,7 +48,12 @@ $inventory_result = $conn->query($inventory_query);
 <body>
     <div class="container">
         <h2>Rice Inventory Dashboard</h2>
-        <a href="logout.php">Logout</a>
+        
+        <!-- Tab-style navigation for Logout and Add Rice -->
+        <div class="tabs">
+            <a href="logout.php" class="tab-link">Logout</a>
+            <a href="add_rice.php" class="tab-link">Add Rice</a>
+        </div>
         
         <table class="dashboard-table">
             <tr>
