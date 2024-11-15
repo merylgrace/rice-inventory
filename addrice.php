@@ -28,8 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Rice - Inventory</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Link to your existing CSS file -->
-    <link rel="stylesheet" href="add_rice.css"> <!-- Link to the new add_rice.css -->
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
@@ -41,7 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="modal-content">
         <span class="close-btn" id="closeModalBtn">&times;</span>
         <h3>Add Rice to Inventory</h3>
-        <form action="add_rice.php" method="POST">
+        <form action="addrice.php" method="POST">
             <label for="rice_name">Rice Name:</label>
             <input type="text" id="rice_name" name="rice_name" required>
 
