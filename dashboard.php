@@ -2,6 +2,7 @@
 include 'dbconnect.php';
 session_start();
 
+// Check if user is logged in, otherwise redirect to login page
 if (!isset($_SESSION["UserID"])) {
     header("Location: login.php");
     exit();
@@ -10,7 +11,7 @@ if (!isset($_SESSION["UserID"])) {
 $userID = $_SESSION["UserID"];
 $roleID = $_SESSION["RoleID"];
 
-// Join query to display rice inventory along with roles and user activities
+// Revised SQL Query to fix the JOIN for activity logs and display rice inventory with activity logs
 $inventory_query = "
     SELECT 
         inventory.RiceID,
@@ -28,7 +29,7 @@ $inventory_query = "
     LEFT JOIN 
         inventoryupdates ON inventory.RiceID = inventoryupdates.RiceID
     LEFT JOIN 
-        activitylogs ON activitylogs.UserID = inventoryupdates.RiceID
+        activitylogs ON activitylogs.UserID = inventoryupdates.UserID
     LEFT JOIN 
         users ON activitylogs.UserID = users.UserID
     LEFT JOIN 
@@ -43,7 +44,7 @@ $inventory_result = $conn->query($inventory_query);
 <html lang="en">
 <head>
     <link rel="stylesheet" href="css/style.css">
-    <title>Dashboard</title>
+    <title>Rice Inventory Dashboard</title>
 </head>
 <body>
     <div class="container">
@@ -55,6 +56,7 @@ $inventory_result = $conn->query($inventory_query);
             <a href="addrice.php" class="tab-link">Add Rice</a>
         </div>
         
+        <!-- Dashboard Table to display rice inventory with activity logs -->
         <table class="dashboard-table">
             <tr>
                 <th>Rice ID</th>
