@@ -1,19 +1,41 @@
 <?php
-require_once 'dbconnect.php';
+include 'dbconnect.php';
+session_start();
 
+// Check if user is logged in, otherwise redirect to login page
+if (!isset($_SESSION["UserID"])) {
+    header("Location: login.php");
+    exit();
+}
+
+$userID = $_SESSION["UserID"];
+
+// Check if form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Get the form data
     $rice_name = $_POST['rice_name'];
     $quantity = $_POST['quantity'];
     $price = $_POST['price'];
 
-    // Insert rice into the database
+    // Insert rice into the inventory
     $query = "INSERT INTO inventory (RiceName, Quantity, Price, created_at) VALUES (?, ?, ?, NOW())";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("sii", $rice_name, $quantity, $price);
 
     if ($stmt->execute()) {
-        echo "<script>alert('Rice added successfully!'); window.location.href='dashboard.php';</script>";
+        // Rice added successfully, now log the activity
+        $activity_type = "Add Rice";
+        $activity_description = "Added $rice_name with quantity $quantity and price $price.";
+        $activity_time = date("Y-m-d H:i:s");
+
+        // Insert activity log into the activitylogs table
+        $log_query = "INSERT INTO activitylogs (UserID, ActivityType, ActivityDescription, ActivityTime) VALUES (?, ?, ?, ?)";
+        $log_stmt = $conn->prepare($log_query);
+        $log_stmt->bind_param("isss", $userID, $activity_type, $activity_description, $activity_time);
+        $log_stmt->execute();
+
+        // Redirect with a success message
+        echo "<script>alert('Rice added successfully and activity logged!'); window.location.href='dashboard.php';</script>";
     } else {
         echo "<script>alert('Error adding rice. Please try again.');</script>";
     }
@@ -31,62 +53,87 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Add Rice - Inventory</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-        /* Add Rice Button */
-        .add-rice-btn {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            cursor: pointer;
-            font-size: 16px;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-
-        .add-rice-btn:hover {
-            background-color: #45a049;
-        }
-
-        /* Modal styles */
+        /* Modal Styles for Add Rice */
         .modal {
             display: none;
+            /* Hidden by default */
             position: fixed;
             z-index: 1;
+            /* Sit on top */
             left: 0;
             top: 0;
             width: 100%;
+            /* Full width */
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+            /* Full height */
+            background-color: rgba(0, 0, 0, 0.4);
+            /* Black with opacity */
             display: flex;
             justify-content: center;
             align-items: center;
+            /* Center modal vertically and horizontally */
         }
 
         .modal-content {
             background-color: #fff;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            max-width: 500px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            /* Match padding in other containers */
+            border-radius: 8px;
+            width: 90%;
+            /* Consistent width */
+            max-width: 1200px;
+            /* Same max-width as other containers */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        /* Add Rice Form Inputs */
-        #addRiceModal form input {
+
+        /* Modal Form */
+        .modal-content h3 {
+            text-align: center;
+            color: #4c51bf;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Form Labels */
+        .modal-content label {
+            display: block;
+            font-weight: bold;
+            margin: 10px 0 5px;
+            color: #333;
+        }
+
+        /* Input Fields */
+        .modal-content input[type="text"],
+        .modal-content input[type="number"] {
             width: 100%;
             padding: 10px;
             margin: 5px 0 15px;
             border: 1px solid #ddd;
             border-radius: 5px;
             box-sizing: border-box;
+            font-family: Arial, sans-serif;
+            font-size: 1em;
+            color: #333;
         }
 
-        #addRiceModal form label {
-            display: block;
+        /* Button Styling */
+        .modal-content button {
+            background-color: #5a67d8;
+            color: #ffffff;
+            padding: 12px;
+            border: none;
+            width: 100%;
+            border-radius: 5px;
+            font-size: 1em;
             font-weight: bold;
-            margin: 10px 0 5px;
-            color: #333;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .modal-content button:hover {
+            background-color: #4c51bf;
         }
     </style>
 </head>
