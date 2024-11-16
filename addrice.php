@@ -2,6 +2,10 @@
 include 'dbconnect.php';
 session_start();
 
+// Enable error reporting for debugging
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
 // Check if user is logged in, otherwise redirect to login page
 if (!isset($_SESSION["UserID"])) {
     header("Location: login.php");
@@ -20,6 +24,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Insert rice into the inventory
     $query = "INSERT INTO inventory (RiceName, Quantity, Price, created_at) VALUES (?, ?, ?, NOW())";
     $stmt = $conn->prepare($query);
+    
+    if ($stmt === false) {
+        die('MySQL prepare error: ' . $conn->error); // Error in prepare statement
+    }
+    
     $stmt->bind_param("sii", $rice_name, $quantity, $price);
 
     if ($stmt->execute()) {
@@ -31,11 +40,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Insert activity log into the activitylogs table
         $log_query = "INSERT INTO activitylogs (UserID, ActivityType, ActivityDescription, ActivityTime) VALUES (?, ?, ?, ?)";
         $log_stmt = $conn->prepare($log_query);
-        $log_stmt->bind_param("isss", $userID, $activity_type, $activity_description, $activity_time);
-        $log_stmt->execute();
+        
+        if ($log_stmt === false) {
+            die('MySQL prepare error: ' . $conn->error); // Error in prepare statement
+        }
 
-        // Redirect with a success message
-        echo "<script>alert('Rice added successfully and activity logged!'); window.location.href='dashboard.php';</script>";
+        $log_stmt->bind_param("isss", $userID, $activity_type, $activity_description, $activity_time);
+        
+        if ($log_stmt->execute()) {
+            // Redirect with a success message
+            echo "<script>alert('Rice added successfully and activity logged!'); window.location.href='dashboard.php';</script>";
+        } else {
+            echo "<script>alert('Error logging activity. Please try again.');</script>";
+        }
+
+        $log_stmt->close();
     } else {
         echo "<script>alert('Error adding rice. Please try again.');</script>";
     }
