@@ -213,39 +213,3 @@ p {
     text-decoration: none;
     cursor: pointer;
 }
-
-/* Add Rice Button */
-.add-rice-btn {
-    background-color: #5a67d8;
-    color: #ffffff;
-    padding: 12px;
-    border: none;
-    width: 100%;
-    border-radius: 5px;
-    font-size: 1em;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    display: inline-block;
-}
-
-.add-rice-btn:hover {
-    background-color: #4c51bf;
-}
-
-/* Add Rice Form Inputs */
-#addRiceModal form input {
-    width: 100%;
-    padding: 10px;
-    margin: 5px 0 15px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    box-sizing: border-box;
-}
-
-#addRiceModal form label {
-    display: block;
-    font-weight: bold;
-    margin: 10px 0 5px;
-    color: #333;
-}

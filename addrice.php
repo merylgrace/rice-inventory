@@ -24,20 +24,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Rice to Inventory</title>
+    <title>Add Rice - Inventory</title>
+    <link rel="stylesheet" href="styles.css">
     <style>
-        /* General styles */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f9;
-        }
-
-        button {
+        /* Add Rice Button */
+        .add-rice-btn {
             background-color: #4CAF50;
             color: white;
             border: none;
@@ -48,120 +43,99 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             transition: background-color 0.3s;
         }
 
-        button:hover {
+        .add-rice-btn:hover {
             background-color: #45a049;
         }
 
         /* Modal styles */
         .modal {
-            display: none; 
-            position: fixed; 
-            z-index: 1; 
+            display: none;
+            position: fixed;
+            z-index: 1;
             left: 0;
             top: 0;
-            width: 100%; 
-            height: 100%; 
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.5);
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .modal-content {
             background-color: #fff;
-            margin: 10% auto; 
             padding: 20px;
             border: 1px solid #888;
-            width: 80%; 
+            width: 80%;
             max-width: 500px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
-        .close-btn {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .close-btn:hover,
-        .close-btn:focus {
-            color: black;
-            text-decoration: none;
-        }
-
-        form {
-            display: flex;
-            flex-direction: column;
-        }
-
-        label {
-            margin: 10px 0 5px;
-            font-weight: bold;
-        }
-
-        input[type="text"],
-        input[type="number"] {
+        /* Add Rice Form Inputs */
+        #addRiceModal form input {
+            width: 100%;
             padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
+            margin: 5px 0 15px;
+            border: 1px solid #ddd;
             border-radius: 5px;
-            font-size: 14px;
+            box-sizing: border-box;
         }
 
-        input[type="number"]::-webkit-inner-spin-button,
-        input[type="number"]::-webkit-outer-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
+        #addRiceModal form label {
+            display: block;
+            font-weight: bold;
+            margin: 10px 0 5px;
+            color: #333;
         }
     </style>
 </head>
+
 <body>
-<!-- Add Rice Button -->
-<button id="openModalBtn">Add Rice</button>
+    <!-- Modal Structure -->
+    <div id="addRiceModal" class="modal">
+        <div class="modal-content">
+            <h3>Add Rice to Inventory</h3>
+            <form action="addrice.php" method="POST">
+                <label for="rice_name">Rice Name:</label>
+                <input type="text" id="rice_name" name="rice_name" required>
 
-<!-- Modal Structure -->
-<div id="addRiceModal" class="modal">
-    <div class="modal-content">
-        <span class="close-btn" id="closeModalBtn">&times;</span>
-        <h3>Add Rice to Inventory</h3>
-        <form action="addrice.php" method="POST">
-            <label for="rice_name">Rice Name:</label>
-            <input type="text" id="rice_name" name="rice_name" required>
+                <label for="quantity">Quantity:</label>
+                <input type="number" id="quantity" name="quantity" required>
 
-            <label for="quantity">Quantity:</label>
-            <input type="number" id="quantity" name="quantity" required>
+                <label for="price">Price:</label>
+                <input type="number" step="0.01" id="price" name="price" required>
 
-            <label for="price">Price:</label>
-            <input type="number" step="0.01" id="price" name="price" required>
-
-            <button type="submit">Add Rice</button>
-        </form>
+                <button type="submit">Add Rice</button>
+            </form>
+        </div>
     </div>
-</div>
-<script>
-    // Get modal elements
-    var modal = document.getElementById("addRiceModal");
-    var openModalBtn = document.getElementById("openModalBtn");
-    var closeModalBtn = document.getElementById("closeModalBtn");
 
-    // Open the modal when the "Add Rice" button is clicked
-    openModalBtn.onclick = function() {
-        modal.style.display = "block";
-    }
+    <!-- Add JavaScript for Modal -->
+    <script>
+        // Get modal elements
+        var modal = document.getElementById("addRiceModal");
+        var openModalBtn = document.getElementById("openModalBtn");
+        var closeModalBtn = document.getElementById("closeModalBtn");
 
-    // Close the modal when the "X" (close) button is clicked
-    closeModalBtn.onclick = function() {
-        modal.style.display = "none";
-    }
+        // Open the modal when the "Add Rice" button is clicked
+        openModalBtn.onclick = function() {
+            modal.style.display = "block";
+        }
 
-    // Close the modal if the user clicks outside of the modal content
-    window.onclick = function(event) {
-        if (event.target == modal) {
+        // Close the modal when the "X" (close) button is clicked
+        closeModalBtn.onclick = function() {
             modal.style.display = "none";
         }
-    }
-</script>
+
+        // Close the modal if the user clicks outside of the modal content
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
 
 </body>
+
 </html>
