@@ -11,7 +11,15 @@ if (!isset($_SESSION["UserID"])) {
 $userID = $_SESSION["UserID"];
 $roleID = $_SESSION["RoleID"];
 
-// Revised SQL Query to fix the JOIN for activity logs and display rice inventory with activity logs
+// Set default join type (LEFT JOIN)
+$joinType = 'LEFT JOIN';
+
+// Check if form is submitted with a different join type
+if (isset($_POST['join_type'])) {
+    $joinType = $_POST['join_type'];
+}
+
+// Revised SQL Query with dynamic join type selection
 $inventory_query = "
     SELECT 
         inventory.RiceID,
@@ -26,17 +34,18 @@ $inventory_query = "
         activitylogs.ActivityTime
     FROM 
         inventory
-    LEFT JOIN 
+    $joinType 
         inventoryupdates ON inventory.RiceID = inventoryupdates.RiceID
-    LEFT JOIN 
+    $joinType 
         activitylogs ON activitylogs.UserID = inventoryupdates.UserID
-    LEFT JOIN 
+    $joinType 
         users ON activitylogs.UserID = users.UserID
-    LEFT JOIN 
+    $joinType 
         roles ON users.RoleID = roles.RoleID
     ORDER BY 
         inventory.created_at DESC";
 
+// Execute the query
 $inventory_result = $conn->query($inventory_query);
 ?>
 
@@ -55,6 +64,15 @@ $inventory_result = $conn->query($inventory_query);
             <a href="logout.php" class="tab-link">Logout</a>
             <a href="addrice.php" class="tab-link">Add Rice</a>
         </div>
+
+        <!-- Dropdown for Join Type Selection -->
+        <form method="POST" action="">
+            <label for="join_type">Select Join Type:</label>
+            <select name="join_type" id="join_type" onchange="this.form.submit()">
+                <option value="LEFT JOIN" <?php if ($joinType == 'LEFT JOIN') echo 'selected'; ?>>LEFT JOIN</option>
+                <option value="INNER JOIN" <?php if ($joinType == 'INNER JOIN') echo 'selected'; ?>>INNER JOIN</option>
+            </select>
+        </form>
         
         <!-- Dashboard Table to display rice inventory with activity logs -->
         <table class="dashboard-table">
@@ -79,9 +97,9 @@ $inventory_result = $conn->query($inventory_query);
                     <td><?php echo $row["created_at"]; ?></td>
                     <td><?php echo $row["UserName"]; ?></td>
                     <td><?php echo $row["RoleName"]; ?></td>
-                    <td><?php echo $row["ActivityType"]; ?></td>
-                    <td><?php echo $row["ActivityDescription"]; ?></td>
-                    <td><?php echo $row["ActivityTime"]; ?></td>
+                    <td><?php echo $row["ActivityType"] ? $row["ActivityType"] : 'No activity'; ?></td>
+                    <td><?php echo $row["ActivityDescription"] ? $row["ActivityDescription"] : 'No description'; ?></td>
+                    <td><?php echo $row["ActivityTime"] ? $row["ActivityTime"] : 'No time recorded'; ?></td>
                 </tr>
             <?php endwhile; ?>
         </table>
