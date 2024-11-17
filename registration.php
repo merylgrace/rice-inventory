@@ -18,19 +18,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     try {
         if ($stmt->execute()) {
-            // Redirect to login page after successful registration
             header("Location: login.php");
             exit();
         } else {
-            // Handle potential database errors
             throw new Exception("Unable to register user. Please check your RoleID and database setup.");
         }
     } catch (Exception $e) {
-        // Display the error message for debugging
         echo "Error: " . $e->getMessage();
     }
 
-    // Close the prepared statement
     $stmt->close();
 }
 ?>

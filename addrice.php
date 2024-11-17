@@ -24,11 +24,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Insert rice into the inventory
     $query = "INSERT INTO inventory (RiceName, Quantity, Price, created_at) VALUES (?, ?, ?, NOW())";
     $stmt = $conn->prepare($query);
-    
+
     if ($stmt === false) {
-        die('MySQL prepare error: ' . $conn->error); // Error in prepare statement
+        die('MySQL prepare error: ' . $conn->error);
     }
-    
+
     $stmt->bind_param("sii", $rice_name, $quantity, $price);
 
     if ($stmt->execute()) {
@@ -40,13 +40,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Insert activity log into the activitylogs table
         $log_query = "INSERT INTO activitylogs (UserID, ActivityType, ActivityDescription, ActivityTime) VALUES (?, ?, ?, ?)";
         $log_stmt = $conn->prepare($log_query);
-        
+
         if ($log_stmt === false) {
             die('MySQL prepare error: ' . $conn->error); // Error in prepare statement
         }
 
         $log_stmt->bind_param("isss", $userID, $activity_type, $activity_description, $activity_time);
-        
+
         if ($log_stmt->execute()) {
             // Redirect with a success message
             echo "<script>alert('Rice added successfully and activity logged!'); window.location.href='dashboard.php';</script>";
@@ -72,41 +72,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Add Rice - Inventory</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-        /* Modal Styles for Add Rice */
         .modal {
             display: none;
-            /* Hidden by default */
             position: fixed;
             z-index: 1;
-            /* Sit on top */
             left: 0;
             top: 0;
             width: 100%;
-            /* Full width */
             height: 100%;
-            /* Full height */
             background-color: rgba(0, 0, 0, 0.4);
-            /* Black with opacity */
             display: flex;
             justify-content: center;
             align-items: center;
-            /* Center modal vertically and horizontally */
         }
 
         .modal-content {
             background-color: #fff;
             padding: 30px;
-            /* Match padding in other containers */
             border-radius: 8px;
             width: 90%;
-            /* Consistent width */
             max-width: 1200px;
-            /* Same max-width as other containers */
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-
-        /* Modal Form */
         .modal-content h3 {
             text-align: center;
             color: #4c51bf;
@@ -115,7 +103,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             font-family: Arial, sans-serif;
         }
 
-        /* Form Labels */
         .modal-content label {
             display: block;
             font-weight: bold;
@@ -123,7 +110,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             color: #333;
         }
 
-        /* Input Fields */
         .modal-content input[type="text"],
         .modal-content input[type="number"] {
             width: 100%;
@@ -137,7 +123,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             color: #333;
         }
 
-        /* Button Styling */
         .modal-content button {
             background-color: #5a67d8;
             color: #ffffff;
@@ -158,7 +143,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 
 <body>
-    <!-- Modal Structure -->
     <div id="addRiceModal" class="modal">
         <div class="modal-content">
             <h3>Add Rice to Inventory</h3>
@@ -177,24 +161,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
     </div>
 
-    <!-- Add JavaScript for Modal -->
     <script>
-        // Get modal elements
         var modal = document.getElementById("addRiceModal");
         var openModalBtn = document.getElementById("openModalBtn");
         var closeModalBtn = document.getElementById("closeModalBtn");
 
-        // Open the modal when the "Add Rice" button is clicked
         openModalBtn.onclick = function() {
             modal.style.display = "block";
         }
 
-        // Close the modal when the "X" (close) button is clicked
         closeModalBtn.onclick = function() {
             modal.style.display = "none";
         }
 
-        // Close the modal if the user clicks outside of the modal content
         window.onclick = function(event) {
             if (event.target == modal) {
                 modal.style.display = "none";

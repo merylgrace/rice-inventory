@@ -19,7 +19,6 @@ if (isset($_POST['join_type'])) {
     $joinType = $_POST['join_type'];
 }
 
-// Revised SQL Query with dynamic join type selection
 $inventory_query = "
     SELECT 
         inventory.RiceID,
@@ -59,13 +58,11 @@ $inventory_result = $conn->query($inventory_query);
     <div class="container">
         <h2>Rice Inventory Dashboard</h2>
         
-        <!-- Tab-style navigation for Logout and Add Rice -->
         <div class="tabs">
             <a href="logout.php" class="tab-link">Logout</a>
             <a href="addrice.php" class="tab-link">Add Rice</a>
         </div>
 
-        <!-- Dropdown for Join Type Selection -->
         <form method="POST" action="">
             <label for="join_type">Select Join Type:</label>
             <select name="join_type" id="join_type" onchange="this.form.submit()">
@@ -74,7 +71,6 @@ $inventory_result = $conn->query($inventory_query);
             </select>
         </form>
         
-        <!-- Dashboard Table to display rice inventory with activity logs -->
         <table class="dashboard-table">
             <tr>
                 <th>Rice ID</th>

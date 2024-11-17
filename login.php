@@ -59,7 +59,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <button type="submit">Login</button>
         </form>
         
-        <!-- Ensure this link navigates correctly -->
         <p>Not yet registered? <a href="registration.php">Sign up here</a></p>
     </div>
 </body>
